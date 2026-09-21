@@ -20,6 +20,13 @@
 
     <!-- Contenido Dinámico inyectado por las vistas hijas -->
     <main class="container mx-auto px-4 py-8 flex-grow">
+    <!-- Mensaje de notificación flash -->
+        @if (session('success'))
+            <div class="max-w-4xl mx-auto mb-6 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow" role="alert">
+                <p class="font-bold">¡Operación exitosa!</p>
+                <p>{{ session('success') }}</p>
+            </div>
+        @endif
         @yield('content')
     </main>
 

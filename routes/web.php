@@ -3,4 +3,8 @@
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
+// Genera automáticamente las rutas para index, create, store, edit, update y destroy
+Route::resource('tasks', TaskController::class);
+
+// Redirige la raíz '/' a la lista de tareas
+Route::redirect('/', '/tasks');
