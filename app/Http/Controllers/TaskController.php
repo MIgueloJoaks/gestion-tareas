@@ -8,11 +8,29 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     /**
-     * Muestra la lista de todas las tareas.
+     * Muestra la lista de tareas con Búsqueda, Filtros y Paginación.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = Task::latest()->get();
+        $query = Task::query();
+
+        // 1. Búsqueda por palabra clave (usamos ILIKE para PostgreSQL)
+        if ($request->filled('search')) {
+            $query->where('title', 'ILIKE', '%' . $request->input('search') . '%');
+        }
+
+        // 2. Filtro por estado (Pendientes o Completadas)
+        if ($request->filled('filter')) {
+            if ($request->input('filter') === 'pending') {
+                $query->where('completed', false);
+            } elseif ($request->input('filter') === 'completed') {
+                $query->where('completed', true);
+            }
+        }
+
+        // 3. Paginación de 5 tareas por página manteniendo las variables de búsqueda en la URL
+        $tasks = $query->latest()->paginate(5)->withQueryString();
+
         return view('tasks.index', compact('tasks'));
     }
 
@@ -86,5 +104,19 @@ class TaskController extends Controller
     {
         $task->delete();
         return redirect()->route('tasks.index')->with('success', '¡Tarea eliminada exitosamente!');
+    }
+
+    /**
+     * Cambia el estado de una tarea con un solo clic.
+     */
+    public function toggle(Task $task)
+    {
+        // Alterna el estado booleano actual
+        $task->update([
+            'completed' => !$task->completed,
+        ]);
+
+        $estado = $task->completed ? 'completada' : 'marcada como pendiente';
+        return back()->with('success', "Tarea {$estado} correctamente.");
     }
 }
