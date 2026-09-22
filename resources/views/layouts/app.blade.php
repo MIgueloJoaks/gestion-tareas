@@ -13,8 +13,25 @@
     <header class="bg-indigo-600 text-white shadow-md py-4">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold">
-                <a href="{{ route('tasks.index') }}">Gestor de Tareas</a>
+                <a href="{{ route('tasks.index') }}">📌 Gestor de Tareas</a>
             </h1>
+
+            <div class="flex items-center space-x-4 text-sm">
+                @auth
+                    <!-- Se muestra solo si hay usuario logueado -->
+                    <span>Hola, <strong>{{ Auth::user()->name }}</strong></span>
+                    <form action="{{ route('logout') }}" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="bg-indigo-700 hover:bg-indigo-800 px-3 py-1.5 rounded transition">
+                            Cerrar Sesión
+                        </button>
+                    </form>
+                @else
+                    <!-- Se muestra a visitantes anónimos -->
+                    <a href="{{ route('login') }}" class="hover:underline">Iniciar Sesión</a>
+                    <a href="{{ route('register') }}" class="bg-white text-indigo-600 px-3 py-1.5 rounded font-semibold hover:bg-gray-100 transition">Registrarse</a>
+                @endauth
+            </div>
         </div>
     </header>
 

@@ -1,13 +1,24 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
-// Ruta personalizada para cambiar el estado de la tarea rápidamente
-Route::patch('/tasks/{task}/toggle', [TaskController::class, 'toggle'])->name('tasks.toggle');
+// Rutas Públicas (Invitados)
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.store');
+    
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.store');
+});
 
-// Rutas de recurso estándar para el CRUD
-Route::resource('tasks', TaskController::class);
+// Rutas Privadas (Requieren Iniciar Sesión)
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Redirige la raíz '/' a la lista de tareas
-Route::redirect('/', '/tasks');
+    Route::patch('/tasks/{task}/toggle', [TaskController::class, 'toggle'])->name('tasks.toggle');
+    Route::resource('tasks', TaskController::class);
+    
+    Route::redirect('/', '/tasks');
+});

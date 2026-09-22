@@ -102,7 +102,7 @@
     </div>
 
     <!-- Enlaces de Paginación -->
-    <div class="mt-6">
+    <div class="mt-6 [&_svg]:w-4 [&_svg]:h-4">
         {{ $tasks->links() }}
     </div>
 
