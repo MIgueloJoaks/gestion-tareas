@@ -3,46 +3,47 @@
 @section('title', 'Registro de Usuario')
 
 @section('content')
-<div class="max-w-md mx-auto bg-white p-6 rounded-lg shadow">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Crear una Cuenta</h2>
+<section class="mx-auto max-w-md rounded-md border border-white/10 bg-zinc-900/80 p-6 sm:p-8">
+    <p class="font-mono text-xs uppercase text-lime-300">Neo / nuevo perfil</p>
+    <h1 class="mt-3 text-2xl font-semibold text-white">Empieza por aquí.</h1>
+    <p class="mt-1 text-sm text-zinc-400">Crea tu cuenta para organizar tus tareas.</p>
 
-    <form action="{{ route('register.store') }}" method="POST">
+    <form action="{{ route('register.store') }}" method="POST" class="mt-7 space-y-4">
         @csrf
-
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium mb-2">Nombre completo</label>
-            <input type="text" name="name" value="{{ old('name') }}" required 
-                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('name') border-red-500 @enderror">
-            @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+        <div>
+            <label for="name" class="mb-2 block text-sm font-medium text-zinc-200">Nombre completo</label>
+            <input type="text" name="name" id="name" value="{{ old('name') }}" required autofocus autocomplete="name" aria-describedby="name-error" class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-3 text-sm text-white focus:border-lime-300/60 focus:outline-none focus:ring-2 focus:ring-lime-300/20 @error('name') border-red-400 @enderror">
+            @error('name')
+                <p id="name-error" class="mt-2 text-sm text-red-300">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium mb-2">Correo Electrónico</label>
-            <input type="email" name="email" value="{{ old('email') }}" required 
-                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('email') border-red-500 @enderror">
-            @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+        <div>
+            <label for="email" class="mb-2 block text-sm font-medium text-zinc-200">Correo electrónico</label>
+            <input type="email" name="email" id="email" value="{{ old('email') }}" required autocomplete="email" aria-describedby="email-error" class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-3 text-sm text-white focus:border-lime-300/60 focus:outline-none focus:ring-2 focus:ring-lime-300/20 @error('email') border-red-400 @enderror">
+            @error('email')
+                <p id="email-error" class="mt-2 text-sm text-red-300">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium mb-2">Contraseña</label>
-            <input type="password" name="password" required 
-                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 @error('password') border-red-500 @enderror">
-            @error('password') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+        <div>
+            <label for="password" class="mb-2 block text-sm font-medium text-zinc-200">Contraseña</label>
+            <input type="password" name="password" id="password" required autocomplete="new-password" aria-describedby="password-error" class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-3 text-sm text-white focus:border-lime-300/60 focus:outline-none focus:ring-2 focus:ring-lime-300/20 @error('password') border-red-400 @enderror">
+            @error('password')
+                <p id="password-error" class="mt-2 text-sm text-red-300">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="mb-6">
-            <label class="block text-gray-700 font-medium mb-2">Confirmar Contraseña</label>
-            <input type="password" name="password_confirmation" required 
-                   class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <div>
+            <label for="password_confirmation" class="mb-2 block text-sm font-medium text-zinc-200">Confirmar contraseña</label>
+            <input type="password" name="password_confirmation" id="password_confirmation" required autocomplete="new-password" class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-3 text-sm text-white focus:border-lime-300/60 focus:outline-none focus:ring-2 focus:ring-lime-300/20">
         </div>
 
-        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition">
-            Registrarse
-        </button>
-
-        <p class="text-center text-sm text-gray-600 mt-4">
-            ¿Ya tienes cuenta? <a href="{{ route('login') }}" class="text-indigo-600 font-semibold hover:underline">Inicia sesión aquí</a>
-        </p>
+        <button type="submit" class="w-full rounded-md bg-lime-300 px-4 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-lime-200">Crear cuenta</button>
     </form>
-</div>
+
+    <p class="mt-6 border-t border-white/10 pt-5 text-sm text-zinc-400">
+        ¿Ya tienes cuenta? <a href="{{ route('login') }}" class="font-medium text-lime-300 hover:text-lime-200">Inicia sesión</a>
+    </p>
+</section>
 @endsection
