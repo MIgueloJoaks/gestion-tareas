@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Mail\WelcomeMail;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +35,9 @@ class AuthController extends Controller
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        // ENVÍO DE CORREO: Enviamos la notificación de bienvenida
+        Mail::to($user->email)->send(new WelcomeMail($user));
 
         // Autenticamos automáticamente al usuario tras registrarse
         Auth::login($user);
