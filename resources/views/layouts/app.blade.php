@@ -13,7 +13,7 @@
     <header class="bg-indigo-600 text-white shadow-md py-4">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold">
-                <a href="{{ route('tasks.index') }}">📌 Gestor de Tareas</a>
+                <a href="{{ route('tasks.index') }}">Gestor de Tareas</a>
             </h1>
 
             <div class="flex items-center space-x-4 text-sm">
