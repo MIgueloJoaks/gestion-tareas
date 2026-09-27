@@ -1,5 +1,5 @@
 # Usamos la imagen oficial de PHP con servidor Apache
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 # Instalamos dependencias del sistema y librerías necesarias para PostgreSQL
 RUN apt-get update && apt-get install -y \
