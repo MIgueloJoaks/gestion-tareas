@@ -1,43 +1,47 @@
-# Usamos la imagen oficial de PHP con servidor Apache
+# 1. Base PHP 8.3 con Apache
 FROM php:8.3-apache
 
-# Instalamos dependencias del sistema y librerías necesarias para PostgreSQL
+# 2. Instalamos dependencias del sistema, librerías de PostgreSQL y Node.js
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     zip \
     unzip \
     git \
     curl \
+    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
     && docker-php-ext-install pdo pdo_pgsql
 
-# Habilitamos el módulo mod_rewrite de Apache para las rutas de Laravel
+# 3. Habilitamos el módulo mod_rewrite de Apache
 RUN a2enmod rewrite
 
-# Instalamos Composer de forma oficial dentro del contenedor
+# 4. Instalamos Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Definimos el directorio de trabajo dentro del servidor
+# 5. Directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiamos todo el código de tu proyecto al servidor
+# 6. Copiamos el código del proyecto
 COPY . .
 
-# Configuramos Apache para que apunte directamente a la carpeta public/ de Laravel
+# 7. Configuramos la carpeta pública de Apache
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Damos permisos a las carpetas de almacenamiento y caché de Laravel
+# 8. Asignamos permisos de lectura/escritura a Laravel
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Instalamos dependencias de Composer y optimizamos el proyecto
+# 9. Instalamos dependencias de PHP (Composer)
 RUN composer install --no-dev --optimize-autoloader
 
-# Damos permisos de ejecución al script build.sh y ejecutamos comandos iniciales
+# 10. Instalamos dependencias de Node.js y compilamos Vite
+RUN npm install && npm run build
+
+# 11. Damos permisos al script de inicio
 RUN chmod +x build.sh
 
-# Exponemos el puerto 80 estándar
 EXPOSE 80
 
-# Comando para iniciar Apache y ejecutar migraciones
-CMD php artisan config:cache && php artisan route:cache && php artisan migrate --force && apache2-foreground
+# 12. Comando de arranque del servidor y migraciones
+CMD php artisan config:clear && php artisan config:cache && php artisan route:cache && php artisan migrate --force && apache2-foreground
